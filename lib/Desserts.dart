@@ -8,7 +8,6 @@ class DessertsScreen extends StatefulWidget {
 }
 
 class _DessertsScreenState extends State<DessertsScreen> {
-  // Данные для элементов списка десертов
   List<String> items = [
     'Тирамису',
     'Чизкейк',
@@ -24,7 +23,6 @@ class _DessertsScreenState extends State<DessertsScreen> {
 
   final TextEditingController _textEditingController = TextEditingController();
 
-  // Функция добавления нового элемента
   void _addItem() {
     showDialog(
       context: context,
@@ -60,7 +58,6 @@ class _DessertsScreenState extends State<DessertsScreen> {
     );
   }
 
-  // Функция удаления элемента
   void _removeItem(int index) {
     setState(() {
       items.removeAt(index);
@@ -90,6 +87,7 @@ class _DessertsScreenState extends State<DessertsScreen> {
         ),
         itemBuilder: (context, index) {
           return Card(
+            key: ValueKey(items[index]),
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: ListTile(
               leading: const Icon(Icons.cake, color: Colors.pink),
