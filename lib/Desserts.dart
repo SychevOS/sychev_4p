@@ -86,15 +86,18 @@ class _DessertsScreenState extends State<DessertsScreen> {
           thickness: 0.5,
         ),
         itemBuilder: (context, index) {
-          return Card(
-            key: ValueKey(items[index]),
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            child: ListTile(
-              leading: const Icon(Icons.cake, color: Colors.pink),
-              title: Text(items[index]),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: () => _removeItem(index),
+          return GestureDetector(
+            onLongPress: () => _removeItem(index), // Удаление по долгому нажатию
+            child: Card(
+              key: ValueKey(items[index]),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              child: ListTile(
+                leading: const Icon(Icons.cake, color: Colors.pink),
+                title: Text(items[index]),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () => _removeItem(index),
+                ),
               ),
             ),
           );
