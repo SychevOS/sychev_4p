@@ -20,7 +20,7 @@ class MenuTable extends StatelessWidget {
       return const Center(
         child: Text(
           'Меню пусто',
-          style: TextStyle(fontSize: 16, color: Colors.red),
+          style: TextStyle(fontSize: 16, color: Colors.pink),
         ),
       );
     }
