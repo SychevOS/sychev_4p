@@ -16,13 +16,8 @@ class _MenuContainerState extends State<MenuContainer> {
   final List<MenuItem> _menuItems = [];
   Screen _currentScreen = Screen.list;
 
-  void _showList() {
-    setState(() => _currentScreen = Screen.list);
-  }
-
-  void _showForm() {
-    setState(() => _currentScreen = Screen.form);
-  }
+  void _showList() { setState(() => _currentScreen = Screen.list); }
+  void _showForm() { setState(() => _currentScreen = Screen.form); }
 
   void _addItem(String name, String category, double price) {
     setState(() {
