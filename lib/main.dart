@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'ColdDrinks.dart';
-import 'Desserts.dart';
-import 'HotDrinks.dart';
+import 'shared/widgets/ColdDrinks.dart';
+import 'shared/widgets/Desserts.dart';
+import 'shared/widgets/HotDrinks.dart';
 
 void main() {
   runApp(const CoffeeApp());
