@@ -6,6 +6,7 @@ class MenuItem {
   final String? description;
   final bool isAvailable;
 
+
   MenuItem({
     required this.id,
     required this.name,
@@ -13,6 +14,7 @@ class MenuItem {
     required this.price,
     this.description,
     this.isAvailable = true,
+
   });
 
   MenuItem copyWith({
@@ -21,6 +23,7 @@ class MenuItem {
     double? price,
     String? description,
     bool? isAvailable,
+    String? imageUrl,
   }) {
     return MenuItem(
       id: id,
@@ -29,6 +32,7 @@ class MenuItem {
       price: price ?? this.price,
       description: description ?? this.description,
       isAvailable: isAvailable ?? this.isAvailable,
+
     );
   }
 }
