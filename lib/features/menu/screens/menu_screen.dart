@@ -1,32 +1,51 @@
 import 'package:flutter/material.dart';
-import '../models/menu_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../widgets/menu_table.dart';
+import '../models/menu_model.dart';
 
-class MenuListScreen extends StatelessWidget {
+class MenuScreen extends StatelessWidget {
   final List<MenuItem> menuItems;
-  final void Function() onAdd;
-  final void Function(String id) onToggle;
-  final void Function(String id) onDelete;
+  final ValueChanged<String> onToggle;
+  final ValueChanged<String> onDelete;
+  final VoidCallback onAddItem;
 
-  const MenuListScreen({
+  const MenuScreen({
+    super.key,
     required this.menuItems,
-    required this.onAdd,
     required this.onToggle,
     required this.onDelete,
-    super.key,
+    required this.onAddItem,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Меню кофейни')),
-      body: MenuTable(
-        menuItems: menuItems,
-        onToggle: onToggle,
-        onDelete: onDelete,
+      body: Column(
+        children: [
+          const SizedBox(height: 16),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Наше меню',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: MenuTable(
+              menuItems: menuItems,
+              onToggle: onToggle,
+              onDelete: onDelete,
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: onAdd,
+        onPressed: onAddItem,
+        tooltip: 'Добавить позицию',
         child: const Icon(Icons.add),
       ),
     );
