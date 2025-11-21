@@ -1,83 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MenuItemFormScreen extends StatefulWidget {
-  final void Function(String name, String category, double price) onSave;
-  final void Function() onCancel;
+  final Function(String, String, double, String) onSave;
+  final VoidCallback onCancel;
 
   const MenuItemFormScreen({
+    super.key,
     required this.onSave,
     required this.onCancel,
-    super.key,
   });
 
   @override
   State<MenuItemFormScreen> createState() => _MenuItemFormScreenState();
 }
 
-
 class _MenuItemFormScreenState extends State<MenuItemFormScreen> {
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
-  String _selectedCategory = 'hot';
+  String _selectedCategory = 'Горячие напитки';
 
-  void _submit() {
-    final name = _nameController.text.trim();
-    final price = double.tryParse(_priceController.text.trim()) ?? 0.0;
-
-    if (name.isEmpty || price <= 0) return;
-
-    widget.onSave(name, _selectedCategory, price);
-  }
-
+  final List<String> _categories = [
+    'Горячие напитки',
+    'Холодные напитки',
+    'Выпечка',
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Добавить позицию')),
+      appBar: AppBar(
+        title: const Text('Добавить позицию'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: _saveItem,
+          ),
+        ],
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
           children: [
+            const SizedBox(height: 20),
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
                 labelText: 'Название позиции',
+                border: OutlineInputBorder(),
               ),
             ),
+            const SizedBox(height: 16),
+            DropdownButtonFormField<String>(
+              value: _selectedCategory,
+              decoration: const InputDecoration(
+                labelText: 'Категория',
+                border: OutlineInputBorder(),
+              ),
+              items: _categories.map((String category) {
+                return DropdownMenuItem<String>(
+                  value: category,
+                  child: Text(category),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedCategory = newValue!;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
             TextField(
               controller: _priceController,
               decoration: const InputDecoration(
                 labelText: 'Цена',
+                border: OutlineInputBorder(),
+                prefixText: '₽ ', // ЗАМЕНА НА РУБЛИ
               ),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
-            DropdownButtonFormField<String>(
-              value: _selectedCategory,
-              items: const [
-                DropdownMenuItem(value: 'hot', child: Text('Горячий напиток')),
-                DropdownMenuItem(value: 'cold', child: Text('Холодный напиток')),
-                DropdownMenuItem(value: 'dessert', child: Text('Десерт')),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  _selectedCategory = value!;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: _submit,
-                    child: const Text('Добавить'),
+                  child: OutlinedButton(
+                    onPressed: widget.onCancel,
+                    child: const Text('Отмена'),
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: widget.onCancel,
-                    child: const Text('Назад'),
+                    onPressed: _saveItem,
+                    child: const Text('Сохранить'),
                   ),
                 ),
               ],
@@ -86,6 +101,26 @@ class _MenuItemFormScreenState extends State<MenuItemFormScreen> {
         ),
       ),
     );
+  }
+
+  void _saveItem() {
+    final name = _nameController.text.trim();
+    final priceText = _priceController.text.trim();
+
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Введите название позиции')),
+      );
+      return;
+    }
+
+    final price = double.tryParse(priceText);
+    if (price == null || price <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Введите корректную цену')),
+      );
+      return;
+    }
   }
 
   @override
